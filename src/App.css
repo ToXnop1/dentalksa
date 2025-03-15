@@ -23,12 +23,12 @@ body {
 }
 
 .toggle-btn {
-  padding: 10px 15px;
+  padding: 10px;
   border: none;
   cursor: pointer;
-  background-color: white;
-  color: #6200ea;
-  border-radius: 5px;
+  background: none;
+  font-size: 24px;
+  color: inherit;
 }
 
 .header {
