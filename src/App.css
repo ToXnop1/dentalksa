@@ -1,0 +1,96 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.app-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background-color: #6200ea;
+  color: white;
+}
+
+.logo {
+  font-size: 1.5rem;
+}
+
+.toggle-btn {
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  background-color: white;
+  color: #6200ea;
+  border-radius: 5px;
+}
+
+.header {
+  margin: 30px 0;
+}
+
+.upload-section {
+  margin: 20px 0;
+}
+
+.upload-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.upload-input {
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.process-btn {
+  padding: 10px 20px;
+  background-color: #6200ea;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.results-section {
+  margin-top: 40px;
+}
+
+.image-placeholder {
+  width: 300px;
+  height: 200px;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.footer {
+  margin-top: 50px;
+  padding: 15px;
+  background-color: #333;
+  color: white;
+}
+
+/* Dark Mode */
+.dark-mode {
+  background-color: #121212;
+  color: white;
+}
+
+.dark-mode .navbar {
+  background-color: #3700b3;
+}
+
+.dark-mode .process-btn {
+  background-color: #bb86fc;
+  color: black;
+}
