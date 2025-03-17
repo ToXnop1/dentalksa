@@ -17,30 +17,31 @@ function App() {
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      alert("Please select an X-ray image first.");
-      return;
+        alert("Please select an X-ray image first.");
+        return;
     }
 
     const formData = new FormData();
     formData.append("image", selectedFile);
 
     try {
-      const response = await fetch("https://953c-178-86-45-87.ngrok-free.app", {
-        method: "POST",
-        body: formData,
-      });
+        const response = await fetch("https://953c-178-86-45-87.ngrok-free.app/predict", { 
+            method: "POST",
+            body: formData,
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to process the image");
-      }
+        if (!response.ok) {
+            throw new Error("Failed to process the image");
+        }
 
-      const data = await response.json();
-      setResult(data.detections);
+        const data = await response.json();
+        setResult(data.detections);
     } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Failed to analyze the image. Please try again.");
+        console.error("Error uploading image:", error);
+        alert("Failed to analyze the image. Please try again.");
     }
-  };
+};
+
 
   return (
     <div className={`app-container ${darkMode ? "dark" : "light"}`}>
