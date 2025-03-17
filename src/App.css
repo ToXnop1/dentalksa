@@ -1,3 +1,4 @@
+/* 🌙 الوضع العام */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -5,21 +6,25 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* 🖥️ حاوية التطبيق */
 .app-container {
   text-align: center;
   padding: 20px;
 }
 
+/* 🔵 شريط التنقل */
 .navbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 15px 30px;
   background-color: #6200ea;
   color: white;
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
 .toggle-btn {
@@ -31,10 +36,12 @@ body {
   color: inherit;
 }
 
+/* 🏷️ عنوان الصفحة */
 .header {
   margin: 30px 0;
 }
 
+/* 🖼️ قسم تحميل الصور */
 .upload-section {
   margin: 20px 0;
 }
@@ -43,11 +50,14 @@ body {
   display: block;
   margin-bottom: 10px;
   font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .upload-input {
   padding: 10px;
   margin-bottom: 15px;
+  border: 2px solid #6200ea;
+  border-radius: 5px;
 }
 
 .process-btn {
@@ -57,22 +67,51 @@ body {
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  font-size: 1rem;
+  transition: background 0.3s ease;
 }
 
+.process-btn:hover {
+  background-color: #3700b3;
+}
+
+/* 📊 قسم عرض النتائج */
 .results-section {
   margin-top: 40px;
 }
 
 .image-placeholder {
-  width: 300px;
-  height: 200px;
-  background-color: #e0e0e0;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: auto;
+  max-width: 90%;
+  overflow: hidden;
+  background: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.processed-image {
+  max-width: 100%;
+  max-height: 400px;
+  display: block;
+  border-radius: 10px;
+}
+
+/* 📜 عرض البيانات */
+.analysis-data {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+/* 📌 الفوتر */
 .footer {
   margin-top: 50px;
   padding: 15px;
@@ -80,7 +119,7 @@ body {
   color: white;
 }
 
-/* Dark Mode */
+/* 🌙 الوضع الليلي */
 .dark-mode {
   background-color: #121212;
   color: white;
@@ -93,4 +132,13 @@ body {
 .dark-mode .process-btn {
   background-color: #bb86fc;
   color: black;
+}
+
+.dark-mode .image-placeholder {
+  background: #222;
+}
+
+.dark-mode .analysis-data {
+  background: #222;
+  color: white;
 }
