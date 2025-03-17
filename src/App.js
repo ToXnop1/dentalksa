@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import "./App.css";
 
-const API_URL = "https://8b67-2001-16a4-2f1-e895-4c03-ba21-b01f-5a96.ngrok-free.app"; // استبدل هذا برابط ngrok الخاص بك
+const API_URL = "https://6c05-2001-16a4-2f1-e895-4c03-ba21-b01f-5a96.ngrok-free.app"; // رابط ngrok الخاص بك
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [result, setResult] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null); // لمعاينة الصورة قبل التحليل
+  const [processedImage, setProcessedImage] = useState(null); // لمعاينة الصورة المعالجة
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -18,7 +19,7 @@ function App() {
     const file = event.target.files[0];
     setSelectedFile(file);
 
-    // عرض معاينة الصورة التي سيتم رفعها
+    // عرض معاينة للصورة
     const reader = new FileReader();
     reader.onload = () => {
       setImagePreview(reader.result);
@@ -39,6 +40,9 @@ function App() {
       const response = await fetch(`${API_URL}/predict`, {
         method: "POST",
         body: formData,
+        headers: {
+          "Access-Control-Allow-Origin": "*", // حل مشكلة CORS
+        },
       });
 
       if (!response.ok) {
@@ -48,8 +52,10 @@ function App() {
       const data = await response.json();
       setResult(data.detections);
 
-      // تحميل الصورة المعالجة وعرضها
-      setImagePreview(`data:image/jpeg;base64,${data.image}`);
+      // تحديث الصورة المعالجة المستلمة من الـ API
+      if (data.image) {
+        setProcessedImage(`data:image/jpeg;base64,${data.image}`);
+      }
     } catch (error) {
       console.error("Error uploading image:", error);
       alert("Failed to analyze the image. Please try again.");
@@ -78,13 +84,18 @@ function App() {
 
       <section className="results-section">
         <h3>Analysis Results</h3>
+        <div className="image-preview">
+          {imagePreview && <img src={imagePreview} alt="Selected X-ray" className="preview-image" />}
+        </div>
+
         <div className="image-placeholder">
-          {imagePreview ? (
-            <img src={imagePreview} alt="Processed X-ray" className="processed-image" />
+          {processedImage ? (
+            <img src={processedImage} alt="Processed X-ray" className="processed-image" />
           ) : (
             "Your analyzed image will appear here."
           )}
         </div>
+
         {result && (
           <div className="analysis-data">
             <pre>{JSON.stringify(result, null, 2)}</pre>
