@@ -1,25 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
-const API_URL = "https://6c05-2001-16a4-2f1-e895-4c03-ba21-b01f-5a96.ngrok-free.app"; // رابط ngrok الخاص بك
+const API_URL = "https://7966-2001-16a4-2f1-e895-4c03-ba21-b01f-5a96.ngrok-free.app"; // رابط ngrok الخاص بك
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  // تفعيل الوضع المظلم افتراضيًا عند تحميل الصفحة
+  const [darkMode, setDarkMode] = useState(() => {
+    document.body.classList.add("dark-mode");
+    return true;
+  });
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [result, setResult] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // لمعاينة الصورة قبل التحليل
-  const [processedImage, setProcessedImage] = useState(null); // لمعاينة الصورة المعالجة
+  const [imagePreview, setImagePreview] = useState(null);
+  const [processedImage, setProcessedImage] = useState(null);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle("dark-mode", !darkMode);
+    setDarkMode((prevMode) => {
+      document.body.classList.toggle("dark-mode", !prevMode);
+      return !prevMode;
+    });
   };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
 
-    // عرض معاينة للصورة
+    // عرض معاينة الصورة
     const reader = new FileReader();
     reader.onload = () => {
       setImagePreview(reader.result);
@@ -41,8 +48,9 @@ function App() {
         method: "POST",
         body: formData,
         headers: {
-          "Access-Control-Allow-Origin": "*", // حل مشكلة CORS
+          "Access-Control-Allow-Origin": "*",
         },
+        mode: "cors", // 🔥 تفعيل CORS
       });
 
       if (!response.ok) {
@@ -52,7 +60,6 @@ function App() {
       const data = await response.json();
       setResult(data.detections);
 
-      // تحديث الصورة المعالجة المستلمة من الـ API
       if (data.image) {
         setProcessedImage(`data:image/jpeg;base64,${data.image}`);
       }
@@ -84,21 +91,26 @@ function App() {
 
       <section className="results-section">
         <h3>Analysis Results</h3>
-        <div className="image-preview">
-          {imagePreview && <img src={imagePreview} alt="Selected X-ray" className="preview-image" />}
-        </div>
-
         <div className="image-placeholder">
           {processedImage ? (
             <img src={processedImage} alt="Processed X-ray" className="processed-image" />
+          ) : imagePreview ? (
+            <img src={imagePreview} alt="X-ray Preview" className="image-preview" />
           ) : (
             "Your analyzed image will appear here."
           )}
         </div>
-
         {result && (
           <div className="analysis-data">
-            <pre>{JSON.stringify(result, null, 2)}</pre>
+            <h4>Detection Results:</h4>
+            <ul>
+              {result.map((detection, index) => (
+                <li key={index}>
+                  Class: {detection.class}, Confidence: {detection.confidence.toFixed(2)}, 
+                  Box: {detection.box.join(", ")}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </section>
