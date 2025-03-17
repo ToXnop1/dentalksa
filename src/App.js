@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "./App.css";
 
+const API_URL = "https://5cd9-2001-16a4-2f1-e895-4c03-ba21-b01f-5a96.ngrok-free.app"; // رابط ngrok الخاص بك
+
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [result, setResult] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null); // عرض صورة النتيجة
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -12,36 +15,46 @@ function App() {
   };
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    setSelectedFile(file);
+
+    // عرض معاينة الصورة التي سيتم رفعها
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleUpload = async () => {
     if (!selectedFile) {
-        alert("Please select an X-ray image first.");
-        return;
+      alert("Please select an X-ray image first.");
+      return;
     }
 
     const formData = new FormData();
     formData.append("image", selectedFile);
 
     try {
-        const response = await fetch("https://953c-178-86-45-87.ngrok-free.app/predict", { 
-            method: "POST",
-            body: formData,
-        });
+      const response = await fetch(`${API_URL}/predict`, {
+        method: "POST",
+        body: formData,
+      });
 
-        if (!response.ok) {
-            throw new Error("Failed to process the image");
-        }
+      if (!response.ok) {
+        throw new Error("Failed to process the image");
+      }
 
-        const data = await response.json();
-        setResult(data.detections);
+      const data = await response.json();
+      setResult(data.detections);
+
+      // تحميل الصورة المعالجة وعرضها
+      setImagePreview(`${API_URL}/static/processed_image.jpg`);
     } catch (error) {
-        console.error("Error uploading image:", error);
-        alert("Failed to analyze the image. Please try again.");
+      console.error("Error uploading image:", error);
+      alert("Failed to analyze the image. Please try again.");
     }
-};
-
+  };
 
   return (
     <div className={`app-container ${darkMode ? "dark" : "light"}`}>
@@ -66,8 +79,17 @@ function App() {
       <section className="results-section">
         <h3>Analysis Results</h3>
         <div className="image-placeholder">
-          {result ? <pre>{JSON.stringify(result, null, 2)}</pre> : "Your analyzed image will appear here."}
+          {imagePreview ? (
+            <img src={imagePreview} alt="Processed X-ray" className="processed-image" />
+          ) : (
+            "Your analyzed image will appear here."
+          )}
         </div>
+        {result && (
+          <div className="analysis-data">
+            <pre>{JSON.stringify(result, null, 2)}</pre>
+          </div>
+        )}
       </section>
 
       <footer className="footer">
