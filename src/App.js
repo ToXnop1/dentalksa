@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
-const API_URL = "https://87d9-2001-16a4-2f1-e895-4c03-ba21-b01f-5a96.ngrok-free.app"; // رابط API من ngrok
+const API_URL = "https://8b67-2001-16a4-2f1-e895-4c03-ba21-b01f-5a96.ngrok-free.app"; // استبدل هذا برابط ngrok الخاص بك
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -18,6 +18,7 @@ function App() {
     const file = event.target.files[0];
     setSelectedFile(file);
 
+    // عرض معاينة الصورة التي سيتم رفعها
     const reader = new FileReader();
     reader.onload = () => {
       setImagePreview(reader.result);
@@ -47,9 +48,8 @@ function App() {
       const data = await response.json();
       setResult(data.detections);
 
-      if (data.image) {
-        setImagePreview(`data:image/jpeg;base64,${data.image}`);
-      }
+      // تحميل الصورة المعالجة وعرضها
+      setImagePreview(`data:image/jpeg;base64,${data.image}`);
     } catch (error) {
       console.error("Error uploading image:", error);
       alert("Failed to analyze the image. Please try again.");
